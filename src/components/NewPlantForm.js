@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 
 function NewPlantForm(props) {
-  const [newPlant, setNewPlant] = useState({ name: "", image: "", price: 0 });
+  const [newPlant, setNewPlant] = useState({
+    name: "foo",
+    image: "",
+    price: 0,
+  });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -11,20 +15,24 @@ function NewPlantForm(props) {
     }));
   };
 
-  const handleAddPlant = async (e) => {
-    e.preventDefault();
+  const handleAddPlant = async (event) => {
+    event.preventDefault();
+    const plantData = {
+      ...newPlant,
+      price: Number(newPlant.price), // Convert price to number right before sending
+    };
+
     try {
       const response = await fetch("http://localhost:6001/plants", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "Application/JSON",
         },
-        body: JSON.stringify(newPlant),
+        body: JSON.stringify(plantData),
       });
       if (response.ok) {
-        props.fetchPlants(); // Refresh plant list after adding a new plant
-        // Reset form fields after successful submission
-        setNewPlant({ name: "", image: "", price: 0 });
+        props.fetchPlants(); // Refresh the plant list after adding a new plant
+        setNewPlant({ name: "", image: "", price: 0 }); // Reset form fields
       }
     } catch (error) {
       console.error("Error adding plant:", error);

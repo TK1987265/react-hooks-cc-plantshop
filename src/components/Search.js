@@ -1,20 +1,23 @@
 import React, { useState } from "react";
 
-function Search({ plants, setPlants }) {
+function Search({ setPlants, allPlants }) {
+  // Expect allPlants to be the original complete list
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearchChange = (e) => {
     const query = e.target.value.toLowerCase();
     setSearchQuery(query);
 
-    // Filter the plants based on the search query
-    const filtered = plants.filter((plant) =>
-      plant.name.toLowerCase().includes(query)
-    );
-
-    // Update the plants based on the search query,
-    // or reset to the original list if the query is empty
-    setPlants(query ? filtered : plants);
+    if (!query) {
+      setPlants(allPlants); // If query is empty, reset to the original plant list
+    } else {
+      // Filter the plants based on the search query
+      const filteredPlants = allPlants.filter((plant) =>
+        plant.name.toLowerCase().includes(query)
+      );
+      setPlants(filteredPlants);
+      console.log(filteredPlants);
+    }
   };
 
   return (

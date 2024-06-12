@@ -1,31 +1,37 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Header from "./Header";
-import PlantPage from "./PlantPage";
-import {useState, useEffect} from "react"
+import PlantPage from "./PlantPage"; // Assuming PlantPage uses PlantList
 
 function App() {
   const [plants, setPlants] = useState([]);
-  // const [searchQuery, setSearchQuery] = useState("");
 
- 
   useEffect(() => {
     fetchPlants();
   }, []);
 
   const fetchPlants = async () => {
-    try {
-      const response = await fetch("http://localhost:6001/plants");
-      const data = await response.json();
-      setPlants(data);
-      console.log(data)
-    } catch (error) {
-      console.error("Error fetching plants:", error);
-    }
+    const response = await fetch("http://localhost:6001/plants");
+    const data = await response.json();
+    setPlants(data);
   };
+
+  const toggleSoldOut = (id) => {
+    setPlants(
+      plants.map((plant) =>
+        plant.id === id ? { ...plant, soldOut: !plant.soldOut } : plant
+      )
+    );
+  };
+
   return (
     <div className="app">
       <Header />
-      <PlantPage plants={plants} fetchPlants = {fetchPlants} />
+      <PlantPage
+        fetchPlants={fetchPlants}
+        plants={plants}
+        onToggleSoldOut={toggleSoldOut}
+        setPlants={setPlants}
+      />
     </div>
   );
 }
