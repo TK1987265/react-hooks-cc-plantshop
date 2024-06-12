@@ -7,7 +7,12 @@ function PlantCard({ plant, onMarkSoldOut }) {
       <h4>{plant.name}</h4>
       <p>Price: {plant.price}</p>
       <button onClick={onMarkSoldOut}>
-        {plant.soldOut ? "Out of Stock" : "In Stock"}
+        {plant.soldOut ? (
+           <button>Out of Stock</button>
+       
+      ) : (
+        <button className="primary">In Stock</button>
+      )}
       </button>
     </li>
   );
